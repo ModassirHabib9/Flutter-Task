@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'home/home_screen_nine9.dart';
@@ -5,13 +7,50 @@ import 'home/home_screen_11.dart';
 import 'package:untitled/Widgets/text_field.dart';
 
 class Update_User_Screen extends StatefulWidget {
+  // final String id;
+  // Update_User_Screen({this.id})
   @override
   _Update_User_ScreenState createState() => _Update_User_ScreenState();
 }
 
 class _Update_User_ScreenState extends State<Update_User_Screen> {
+//   getUserDetails() async {
+//   await FirebaseFirestore.instance.instance
+//       .collection('users')
+//       .document(authNotifier.user.uid)
+//       .get()
+//       .catchError((e) => print(e))
+//       .then((value) => authNotifier.setUserDetails(User.fromMap(value.data)));
+// }
+  // final name=snapshot.data["UserName"];
+  final phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
+  final creationTime = FirebaseAuth.instance.currentUser!.metadata.creationTime;
+
+  User? user = FirebaseAuth.instance.currentUser;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  @override
+  void initState() {
+    // uid = FirebaseAuth.instance.currentUser!.uid;
+    // TODO: implement initState
+    super.initState();
+  }
+
+  // Updaing Student
+  CollectionReference students = FirebaseFirestore.instance.collection('User');
+
+  Future<void> updateUser(id, name, email) {
+    return students
+        .doc(id)
+        .update({
+          'authorName': name,
+          'desc': email,
+          // 'title': password,
+        })
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +111,7 @@ class _Update_User_ScreenState extends State<Update_User_Screen> {
                 child: Column(
                   children: [
                     Add_TextField(
-                      hint: "John Doe",
+                      hint: 'email',
                       width: double.infinity,
                       onChange: () {},
                       controller: emailController,
@@ -84,9 +123,9 @@ class _Update_User_ScreenState extends State<Update_User_Screen> {
                     ),
                     const SizedBox(height: 10),
                     Add_TextField(
-                      hint: "johndoe@mepa.com",
+                      hint: '${creationTime}',
                       width: double.infinity,
-                      controller: emailController,
+                      controller: passwordController,
                       onChange: () {},
                       kry: TextInputType.emailAddress,
                       suffixIcon: const Icon(Icons.person),
@@ -96,7 +135,7 @@ class _Update_User_ScreenState extends State<Update_User_Screen> {
                     ),
                     const SizedBox(height: 10),
                     Add_TextField(
-                      hint: "+1-987654321",
+                      hint: '$phoneNumber',
                       width: double.infinity,
                       onChange: () {},
                       controller: emailController,
@@ -115,6 +154,7 @@ class _Update_User_ScreenState extends State<Update_User_Screen> {
                         color: const Color(0xFFFF8000),
                         child: const Text("Update Profile"),
                         onPressed: () {
+                          // updateUser(Widget.id, name, email);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +28,8 @@ class _Login_ScreenState extends State<Login_Screen> {
   // of the TextField.
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   userLogin() async {
+    SharedPreferences pref;
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -37,12 +39,15 @@ class _Login_ScreenState extends State<Login_Screen> {
           builder: (context) => BottomNavBar(),
         ),
       );
+      pref = await SharedPreferences.getInstance();
+      pref.setString("email", email);
+      print("Email" + email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         // ignore: avoid_print
         print("No User Found for that Email");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: Colors.orangeAccent,
             content: Text(
               "No User Found for that Email",
@@ -53,7 +58,7 @@ class _Login_ScreenState extends State<Login_Screen> {
       } else if (e.code == 'wrong-password') {
         print("Wrong Password Provided by User");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: Colors.orangeAccent,
             content: Text(
               "Wrong Password Provided by User",
@@ -68,8 +73,6 @@ class _Login_ScreenState extends State<Login_Screen> {
   Saveuserid(String id) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('userid', id);
-    print("User id 2");
-    print(id);
     // prefs.setInt('usertype', selectedindex);
   }
 
@@ -151,6 +154,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                               email = emailController.text;
                               password = passwordController.text;
                             });
+
                             userLogin();
                           }
                         },
@@ -164,12 +168,14 @@ class _Login_ScreenState extends State<Login_Screen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Don't have an Account? ",
                             style: TextStyle(color: Colors.black, fontSize: 18),
                           ),
                           TextButton(
-                            onPressed: () => {
+                            onPressed: () async {
+                              Saveuserid(["UserId"].toString());
+                              print("Stored Id" + ["uid"].toString());
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   PageRouteBuilder(
@@ -177,7 +183,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                                         Registration_Screen(),
                                     transitionDuration: Duration(seconds: 0),
                                   ),
-                                  (route) => false)
+                                  (route) => false);
                             },
                             child: Text('Signup',
                                 style: TextStyle(

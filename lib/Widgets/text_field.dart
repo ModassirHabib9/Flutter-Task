@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -134,71 +135,31 @@ class Add_TextField2 extends StatelessWidget {
   }
 }
 
-class Hide_TextField extends StatelessWidget {
-  final String hint;
-  final TextInputType kry;
-  final double width;
-  final Function() onChange;
-  // final Function validator;
-  final Widget suffixIcon;
-  final Widget prefixIcon;
-  // final Function onTap;
-  // final TextEditingController controller;
-  // final Color borderColor;
-  // final bool obscureText;
-  // final InputDecoration decoration;
-  // final Function(String) validator;
-
-  // final MaskFilter maskFilter;
-
-  Hide_TextField({
-    @override required this.hint,
-    @override required this.width,
-    @override required this.onChange,
-    @override required this.kry,
-    // required this.validator,
-    @override required this.suffixIcon,
-    @override required this.prefixIcon,
-    // required this.onTap,
-    // required this.controller,
-    // required this.borderColor,
-    // required this.obscureText,
-    /*required this.decoration*/
-  });
+class MyWidgetListTile extends StatelessWidget {
+  final Icon leding;
+  final Icon trailing;
+  final Function() ontap;
+  final String text;
+  MyWidgetListTile(
+      {Key? key,
+      required this.leding,
+      required this.text,
+      required this.ontap,
+      required this.trailing})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: false,
-      // keyboardType: TextInputType.phone,
-      onChanged: onChange(),
-      // controller: callback,
-      // autovalidate: true,
-      // obscureText: obscureText,
-      // validator: validator(),
-      // inputFormatters: inputFormatters,
-      keyboardType: kry,
-
-      decoration: InputDecoration(
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        enabled: false,
-        contentPadding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
-        hintText: hint,
-        filled: true,
-        fillColor: const Color(0xFFF0F0F0),
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25.0),
-            borderSide: BorderSide.none),
-        enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-            borderSide: BorderSide(color: ColorResources.WHITE, width: 2)),
-        focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            borderSide: BorderSide(
-                color: Color.fromRGBO(240, 240, 240, 100), width: 2)),
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30), color: Color(0xFFF0F0F0)),
+      child: ListTile(
+        onTap: ontap,
+        leading: leding,
+        title: Text(text),
+        trailing: trailing,
       ),
-      // inputFormatters: [phoneFormatter],
     );
   }
 }

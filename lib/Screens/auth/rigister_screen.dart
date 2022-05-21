@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Screens/auth/login_screen.dart';
 import 'package:untitled/Widgets/color_resource.dart';
 import 'package:untitled/Widgets/have_account_yes_no.dart';
@@ -24,6 +25,7 @@ class _Registration_ScreenState extends State<Registration_Screen> {
   final TextEditingController phoneNumber = TextEditingController();
   final TextEditingController address = TextEditingController();
   final TextEditingController password = TextEditingController();
+  final TextEditingController c_password = TextEditingController();
   static String p =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   static RegExp regExp = new RegExp(p);
@@ -60,18 +62,20 @@ class _Registration_ScreenState extends State<Registration_Screen> {
         ),
       );
     }
+
     await FirebaseFirestore.instance
-        .collection("UserData")
+        .collection("UserRegistration")
         .doc(authResult!.user!.uid)
         .set({
       "UserName": fullName.text,
       "UserEmail": email.text,
       "UserId": authResult!.user!.uid,
       "UserNumber": phoneNumber.text,
-      "UserAddress": address.text,
+      "UserLocation": address.text,
       "password": password.text,
       // "UserGender": isMale == true ? "Male" : "Female"
     });
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => Login_Screen(),
@@ -85,6 +89,7 @@ class _Registration_ScreenState extends State<Registration_Screen> {
   void vaildation() {
     if (email.text.isEmpty &&
         password.text.isEmpty &&
+        c_password.text.isEmpty &&
         fullName.text.isEmpty &&
         address.text.isEmpty &&
         phoneNumber.text.isEmpty) {
@@ -123,6 +128,12 @@ class _Registration_ScreenState extends State<Registration_Screen> {
           content: Text("Phone Number Must Be 11 "),
         ),
       );
+    } else if (address.text.isEmpty) {
+      scaffold.currentState!.showSnackBar(
+        const SnackBar(
+          content: Text("Address Is Empty"),
+        ),
+      );
     } else if (password.text.isEmpty) {
       scaffold.currentState!.showSnackBar(
         const SnackBar(
@@ -135,7 +146,7 @@ class _Registration_ScreenState extends State<Registration_Screen> {
           content: Text("Password Is Too Short"),
         ),
       );
-    } else if (password.text != address.text) {
+    } else if (password.text != c_password.text) {
       scaffold.currentState!.showSnackBar(
         const SnackBar(
           content: Text("Password Does Not Match"),
@@ -173,10 +184,17 @@ class _Registration_ScreenState extends State<Registration_Screen> {
             hint: "Phone Number",
           ),
           const SizedBox(height: 10),
+          MyTextFormField(
+            kry: TextInputType.streetAddress,
+            prefixIcon: const Icon(Icons.location_on_sharp),
+            controller: address,
+            hint: "Your Location",
+          ),
+          const SizedBox(height: 10),
           MyPasswordTextFormField(
             kry: TextInputType.visiblePassword,
             prefixIcon: const Icon(Icons.vpn_key),
-            controller: address,
+            controller: password,
             hint: "Password",
           ),
           const SizedBox(height: 10),
@@ -201,7 +219,7 @@ class _Registration_ScreenState extends State<Registration_Screen> {
             ),
           ),*/
           MyPasswordTextFormField(
-            controller: password,
+            controller: c_password,
             prefixIcon: const Icon(Icons.vpn_key),
             hint: "Confirm Password",
           ),

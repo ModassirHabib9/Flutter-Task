@@ -7,7 +7,10 @@ class BackgroudCurveWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Country_Popup(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Country_Popup(),
+      ),
     );
   }
 }

@@ -15,31 +15,31 @@ class CardsStackWidget extends StatefulWidget {
 
 class _CardsStackWidgetState extends State<CardsStackWidget>
     with SingleTickerProviderStateMixin {
+  ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
+  late final AnimationController _animationController;
+  // imageUrl;
   List<Profile> draggableItems = [
-    const Profile(
+    Profile(
         name: "userlist.length",
         distance: 'Ads Title(Lorem Ipsum dolor set)',
-        imageAsset: 'assets/banner.png'),
-    const Profile(
+        imageAsset: "assets/banner.png"),
+    Profile(
         name: 'Company Name',
         distance: 'Ads Title(Lorem Ipsum dolor set)',
         imageAsset: 'assets/banner2.png'),
-    const Profile(
+    Profile(
         name: 'Company Name',
         distance: 'Ads Title(Lorem Ipsum dolor set) ',
         imageAsset: 'assets/banner.png'),
-    const Profile(
+    Profile(
         name: 'Company Name',
         distance: 'Ads Title(Lorem Ipsum dolor set)',
         imageAsset: 'assets/banner2.png'),
-    const Profile(
+    Profile(
         name: 'Company Name',
         distance: 'Ads Title(Lorem Ipsum dolor set)',
         imageAsset: 'assets/banner.png'),
   ];
-
-  ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
-  late final AnimationController _animationController;
   getData() async {
     try {
       userlist.clear();
@@ -50,9 +50,11 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
               title: element["authorName"],
               subtitle: element["title"]);
           userlist.add(userData);
+          // imageUrl = userData.imageUrl;
           print("userData");
           print(userData);
           print(userData.title);
+          // imageUrl = userData.imageUrl;
         });
       });
     } catch (e) {}
@@ -88,7 +90,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             builder: (context, swipe, _) => Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
-              children: List.generate(userlist.length, (index) {
+              children: List.generate(draggableItems.length, (index) {
                 if (index == draggableItems.length - 1) {
                   return PositionedTransition(
                     rect: RelativeRectTween(
@@ -111,27 +113,26 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                       curve: Curves.easeInOut,
                     )),
                     child: RotationTransition(
-                      turns: Tween<double>(
-                              begin: 0,
-                              end: swipe != Swipe.none
-                                  ? swipe == Swipe.left
-                                      ? -0.1 * 0.3
-                                      : 0.1 * 0.3
-                                  : 0.0)
-                          .animate(
-                        CurvedAnimation(
-                          parent: _animationController,
-                          curve:
-                              const Interval(0, 0.4, curve: Curves.easeInOut),
+                        turns: Tween<double>(
+                                begin: 0,
+                                end: swipe != Swipe.none
+                                    ? swipe == Swipe.left
+                                        ? -0.1 * 0.3
+                                        : 0.1 * 0.3
+                                    : 0.0)
+                            .animate(
+                          CurvedAnimation(
+                            parent: _animationController,
+                            curve:
+                                const Interval(0, 0.4, curve: Curves.easeInOut),
+                          ),
                         ),
-                      ),
-                      child: DragWidget(
-                        profile: draggableItems[index],
-                        index: index,
-                        swipeNotifier: swipeNotifier,
-                        isLastCard: true,
-                      ),
-                    ),
+                        child: DragWidget(
+                          profile: draggableItems[index],
+                          index: index,
+                          swipeNotifier: swipeNotifier,
+                          isLastCard: true,
+                        )),
                   );
                 } else {
                   return DragWidget(

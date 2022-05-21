@@ -3,7 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/bottom_navg_bar.dart';
+import 'package:untitled/Screens/home/home_screen.dart';
 import 'package:untitled/Widgets/color_resource.dart';
+import 'package:untitled/main.dart';
 import '../auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,12 +17,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString('email');
+    print("Hy Email" + email.toString());
     Timer(
         Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => Login_Screen())));
+        () => email != null
+            ? Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => BottomNavBar()))
+            : Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (BuildContext context) => Login_Screen())));
   }
 
   @override

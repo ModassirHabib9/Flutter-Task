@@ -1,10 +1,10 @@
 class Profile {
-  const Profile({
+  Profile({
     required this.name,
     required this.distance,
     required this.imageAsset,
   });
   final String name;
   final String distance;
-  final String imageAsset;
+  String imageAsset;
 }

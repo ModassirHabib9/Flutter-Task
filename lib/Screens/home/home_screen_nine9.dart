@@ -1,4 +1,5 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:untitled/Widgets/color_resource.dart';
@@ -11,189 +12,7 @@ class Home_Screen_nine9 extends StatefulWidget {
 class _Home_Screen_nine9State extends State<Home_Screen_nine9> {
   bool showAvg = false;
   final List<List<double>> charts = [
-    [
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      0.9,
-      1.5,
-      1.7,
-      1.8,
-      2.2,
-      2.1,
-      2.0,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4
-    ],
-    [
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4,
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      0.9,
-      1.5,
-      1.7,
-      1.8,
-      1.7,
-      1.2,
-      0.8,
-      1.9,
-      2.0,
-      2.2,
-      1.9,
-      2.2,
-      2.1,
-      2.0,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4,
-    ],
-    [
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      0.9,
-      1.5,
-      1.7,
-      1.8,
-      1.7,
-      1.2,
-      0.8,
-      1.9,
-      2.0,
-      2.2,
-      1.9,
-      2.2,
-      2.1,
-      2.0,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4,
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      0.9,
-      1.5,
-      1.7,
-      1.8,
-      1.7,
-      1.2,
-      0.8,
-      1.9,
-      2.0,
-      2.2,
-      1.9,
-      2.2,
-      2.1,
-      2.0,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4,
-      0.0,
-      0.3,
-      0.7,
-      0.6,
-      0.55,
-      0.8,
-      1.2,
-      1.3,
-      1.35,
-      0.9,
-      1.5,
-      1.7,
-      1.8,
-      1.7,
-      1.2,
-      0.8,
-      1.9,
-      2.0,
-      2.2,
-      1.9,
-      2.2,
-      2.1,
-      2.0,
-      2.3,
-      2.4,
-      2.45,
-      2.6,
-      3.6,
-      2.6,
-      2.7,
-      2.9,
-      2.8,
-      3.4
-    ]
+    [0.4, 4, 7, 90]
   ];
 
   static final List<String> chartDropdownItems = [
@@ -203,6 +22,11 @@ class _Home_Screen_nine9State extends State<Home_Screen_nine9> {
   ];
   String actualDropdown = chartDropdownItems[0];
   int actualChart = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -295,19 +119,54 @@ class _Home_Screen_nine9State extends State<Home_Screen_nine9> {
                                     fontSize: 34.0)),
                           ],
                         ),
-                        Sparkline(
-                          data: charts[actualChart],
-                          lineWidth: 2.0,
-                          fillMode: FillMode.below,
-                          useCubicSmoothing: true,
-                          cubicSmoothingFactor: 0.2,
-                          fillGradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.indigo, Colors.indigo.shade100],
-                          ),
-                          fillColor: Colors.indigo.withOpacity(0.4),
-                          lineColor: Colors.indigo,
+                        Column(
+                          children: [
+                            StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection("chart")
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  var chart;
+                                  for (int i = 0;
+                                      i < snapshot.data!.docs.length;
+                                      i++) {
+                                    chart = double.parse(
+                                        snapshot.data!.docs[i]['data']);
+                                  }
+                                  return snapshot.data != null
+                                      ? Column(
+                                          children: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  print("object $chart");
+                                                },
+                                                child: Text("klsakl")),
+                                            Sparkline(
+                                              // data: <double>[09, 3, 5, 90],
+
+                                              data: <double>[chart],
+                                              lineWidth: 2.0,
+                                              fillMode: FillMode.below,
+                                              useCubicSmoothing: true,
+                                              cubicSmoothingFactor: 0.2,
+                                              fillGradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Colors.indigo,
+                                                  Colors.indigo.shade100
+                                                ],
+                                              ),
+                                              fillColor: Colors.indigo
+                                                  .withOpacity(0.4),
+                                              lineColor: Colors.indigo,
+                                            ),
+                                          ],
+                                        )
+                                      : Container();
+                                }),
+                          ],
                         )
                       ],
                     )),

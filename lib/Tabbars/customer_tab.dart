@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/Widgets/color_resource.dart';
 import '../Screens/auth/rigister_screen.dart';
 import 'package:untitled/Tabbars/advertiser_tab.dart';
 import 'package:untitled/Widgets/text_constant.dart';
 import 'package:untitled/Widgets/text_field.dart';
+
+import '../Screens/update_user_screen.dart';
 
 class Customer_Tab extends StatefulWidget {
   @override
@@ -21,61 +24,46 @@ class _Customer_TabState extends State<Customer_Tab> {
               /*mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,*/
               children: [
-                SizedBox(height: 40),
-                Hide_TextField(
-                  hint: "Email",
-                  width: double.infinity,
-                  onChange: () {},
-                  kry: TextInputType.name,
-                  suffixIcon: const Icon(Icons.arrow_forward_ios),
-                  prefixIcon: const Icon(Icons.email),
-                  // controller: controller,
-                  // decoration: decoration
+                MyWidgetListTile(
+                  text: "Email",
+                  ontap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Update_User_Screen()));
+                  },
+                  leding: Icon(Icons.email),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                ),
+                SizedBox(height: 10),
+                MyWidgetListTile(
+                  text: "Location",
+                  ontap: () {},
+                  leding: Icon(Icons.location_on_rounded),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                ),
+                SizedBox(height: 10),
+                MyWidgetListTile(
+                  text: "About",
+                  ontap: () {},
+                  leding: Icon(Icons.watch_later),
+                  trailing: Icon(Icons.arrow_forward_ios),
                 ),
                 const SizedBox(height: 10),
-                Hide_TextField(
-                  hint: "Location",
-                  width: double.infinity,
-                  onChange: () {},
-                  kry: TextInputType.name,
-                  suffixIcon: const Icon(Icons.arrow_forward_ios),
-                  prefixIcon: const Icon(Icons.location_on_rounded),
-                  // controller: controller,
-                  // decoration: decoration
+                MyWidgetListTile(
+                  text: "Rate this App",
+                  ontap: () {},
+                  leding: Icon(Icons.watch_later),
+                  trailing: Icon(Icons.arrow_forward_ios),
                 ),
                 const SizedBox(height: 10),
-                Hide_TextField(
-                  hint: "About",
-                  width: double.infinity,
-                  onChange: () {},
-                  kry: TextInputType.name,
-                  suffixIcon: const Icon(Icons.arrow_forward_ios),
-                  prefixIcon: const Icon(Icons.watch_later),
-                  // controller: controller,
-                  // decoration: decoration
+                MyWidgetListTile(
+                  text: "Logout",
+                  ontap: () {},
+                  leding: Icon(Icons.logout),
+                  trailing: Icon(Icons.arrow_forward_ios),
                 ),
                 const SizedBox(height: 10),
-                Hide_TextField(
-                  hint: "Rate this App",
-                  width: double.infinity,
-                  onChange: () {},
-                  kry: TextInputType.name,
-                  suffixIcon: const Icon(Icons.arrow_forward_ios),
-                  prefixIcon: const Icon(Icons.star_rate),
-                  // controller: controller,
-                  // decoration: decoration
-                ),
-                const SizedBox(height: 10),
-                Hide_TextField(
-                  hint: "Logout",
-                  width: double.infinity,
-                  onChange: () {},
-                  kry: TextInputType.name,
-                  suffixIcon: const Icon(Icons.arrow_forward_ios),
-                  prefixIcon: const Icon(Icons.logout),
-                  // controller: controller,
-                  // decoration: decoration
-                ),
               ],
             ),
           ),

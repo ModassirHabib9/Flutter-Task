@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Card_Swipping_Widgets/background_curve_widget.dart';
 import 'package:untitled/Card_Swipping_Widgets/cards_stack_widget.dart';
 
@@ -12,6 +13,20 @@ class Home_Screen extends StatefulWidget {
 
 // ignore: camel_case_types
 class _Home_ScreenState extends State<Home_Screen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // initial();
+  }
+
+  // void initial() async {
+  //   // logindata = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     // username = logindata.getString('email')!;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
